@@ -1,1 +1,34 @@
-# create your drupal and postgres config here, based off the last assignment
+version: '3.8'
+
+services:
+    drupal-pssql-db:
+        image: postgres
+        volumes:
+            - drupal-data:/var/lib/postgresql/data
+        environment: 
+            - POSTGRES_DB=drupal 
+            - POSTGRES_USER=user
+            - POSTGRES_PASSWORD=Pass1
+        restart: always
+    my-drupal-site: 
+        build: .
+        ports:
+            - '8080:80'    
+        volumes:
+            - /var/www/html/modules
+            - /var/www/html/profiles
+            - /var/www/html/themes        
+            # this takes advantage of the feature in Docker that a new anonymous
+            # volume (which is what we're creating here) will be initialized with the
+            # existing content of the image at the same location
+            - /var/www/html/sites            
+        restart: always
+
+volumes:
+    drupal-data:
+    # drupal-modules:
+    # drupal-profiles:
+    # drupal-themes:
+    # drupal-sites:        
+
+
